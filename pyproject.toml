@@ -1,0 +1,136 @@
+[build-system]
+requires = ["hatchling >= 1.25.0", "hatch-vcs >= 0.4.0 "]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+skip-excluded-dirs = true
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.0.0"
+
+[tool.hatch.version.raw-options]
+version_scheme = "python-simplified-semver"
+
+[project]
+name = "pyqure"
+dynamic = ["version"]
+authors = [
+    { name = "mathieu LETRONE", email = "mathieu.letrone@gmail.com" },
+]
+description = "Dependency injector."
+readme = "README.md"
+
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Intended Audience :: Developers",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+
+requires-python = ">=3.11"
+dependencies = [
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-cov>=5.0.0",
+    "pytest-html>=4.1.1",
+    "pytest-sugar>=1.0.0",
+    "pre-commit>=4.0.1",
+]
+lint = [
+    "mypy[faster-cache]>=1.15.0",
+    "ruff>=0.11.2",
+]
+
+[tool.coverage.run]
+source = ["pyqure"]
+branch = true
+parallel = true
+relative_files = true
+context = '${CONTEXT}'
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+omit = [
+    "tests/*",
+]
+exclude_also = [
+    "def __repr__",
+    "def .+: \\.\\.\\.",
+    "@overload",
+    "return NotImplemented",
+]
+[tool.coverage.html]
+directory = "tests-reports/coverage"
+
+[tool.coverage.xml]
+output = "tests-reports/coverage.xml"
+
+[tool.mypy]
+strict = true
+show_error_context = true
+show_column_numbers = true
+show_error_codes = true
+pretty = true
+files = ["pyqure", "tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+indent-width = 4
+output-format = "full"
+show-fixes = true
+
+[tool.ruff.lint]
+select = [
+    "A", # flake8-builtins
+    "B", # flake8-bugbear
+    "C4", # flake8-comprehension
+    "F", # pyflake
+    "Q", # flake8-quotes
+    "E", # pycodestyle
+    "W",
+    "D", # pydocstyle
+    "I", # isort,
+    "PL", # pylint
+    "ERA", # eradicate
+    "TRY", # tryceratops
+    "RUF", # Ruff
+]
+ignore = [
+    "A003", "D100", "D107", "PLC0105", "D105", "TRY003",
+    #  Formatter compatibility (https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules)
+    "E501", "E111", "E114", "E117", "D206", "D300", "Q000", "Q001", "Q002", "Q003",
+]
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
+line-ending = "auto"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "E731",
+    "PLR2004"
+]

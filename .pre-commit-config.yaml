@@ -1,0 +1,47 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: "v4.4.0"
+    hooks:
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff lint
+        entry: uvx ruff check --fix --exit-non-zero-on-fix
+        language: python
+        types_or: [python, pyi]
+        require_serial: true
+        stages: [pre-commit]
+        additional_dependencies:
+          - "uv>=0.5.0"
+
+      - id: ruff-format
+        name: ruff format
+        entry: uvx ruff format
+        language: python
+        types_or: [ python, pyi ]
+        require_serial: true
+        stages: [pre-commit]
+        additional_dependencies:
+          - "uv>=0.5.0"
+
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: python
+        types_or: [ python, pyi ]
+        stages: [pre-push]
+
+      - id: tests
+        name: tests
+        entry: pytest
+        language: python
+        types_or: [ python, pyi ]
+        stages: [pre-push]
+        pass_filenames: false
