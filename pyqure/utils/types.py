@@ -8,56 +8,56 @@ from pyqure.injectables import Qualifier
 _OPTIONAL_SIZE = 2
 
 
-def unpack_types(typ: type) -> tuple[type, ...]:
+def unpack_types(type_: type) -> tuple[type, ...]:
     """Unpack types."""
-    if not is_union(typ):
-        if is_annotated(typ):
-            return unpack_types(typ.__origin__)
-        return (typ,)
-    if not is_optional(typ):
-        return get_args(typ)
-    return (_get_optional_type(typ),)
+    if not is_union(type_):
+        if is_annotated(type_):
+            return unpack_types(type_.__origin__)
+        return (type_,)
+    if not is_optional(type_):
+        return get_args(type_)
+    return (_get_optional_type(type_),)
 
 
-def is_optional(typ: type) -> bool:
+def is_optional(type_: type) -> bool:
     """Check if it is optional type or not."""
-    type_items = get_args(typ)
+    type_items = get_args(type_)
     return (
-        is_union(typ)
+        is_union(type_)
         and len(type_items) == _OPTIONAL_SIZE
         and any(sub_type is NoneType for sub_type in type_items)
     )
 
 
-def _get_optional_type(typ: type) -> type:
-    type_items = get_args(typ)
+def _get_optional_type(type_: type) -> type:
+    type_items = get_args(type_)
 
     if type_items[0] is NoneType:
         return type_items[1]  # type: ignore[no-any-return]
     return type_items[0]  # type: ignore[no-any-return]
 
 
-def is_union(typ: type) -> TypeGuard[type[Union]]:
+def is_union(type_: type) -> TypeGuard[type[Union]]:
     """Check whether the type is a union type or not."""
-    return get_origin(typ) in (Union, UnionType)
+    return get_origin(type_) in (Union, UnionType)
 
 
-def is_annotated(typ: type) -> TypeGuard[type[Annotated]]:  # type: ignore[valid-type]
+def is_annotated(type_: type) -> TypeGuard[type[Annotated]]:  # type: ignore[valid-type]
     """Check whether the type is annotated or not."""
-    return get_origin(typ) is Annotated
+    return get_origin(type_) is Annotated
 
 
-def is_interface(typ: type) -> bool:
+def is_interface(type_: type) -> bool:
     """Check whether class is an interface or not.
 
     If class inherits from `ABC` or `Protocol`, it's declared as interface class.
     """
-    return isabstract(typ) or typ.__base__ in (ABC, Protocol)
+    return isabstract(type_) or type_.__base__ in (ABC, Protocol)
 
 
-def has_parameter_type(typ: type) -> bool:
+def has_parameter_type(type_: type) -> bool:
     """Check whether the type is defined and not Parameter.empty."""
-    return typ is not Parameter.empty
+    return type_ is not Parameter.empty
 
 
 def filter_mro(clazz: type) -> Sequence[type]:

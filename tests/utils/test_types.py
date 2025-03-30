@@ -35,47 +35,47 @@ def test_unpack_types(t: type, expected: tuple[type, ...]) -> None:
 
 
 @pytest.mark.parametrize(
-    ("typ", "expected"),
+    ("type_", "expected"),
     [(ABCService, True), (ConcreteService, False), (HasA, True), (HasAAndB, False)],
 )
-def test_is_interface(typ: type, expected: bool) -> None:
-    assert is_interface(typ) is expected
+def test_is_interface(type_: type, expected: bool) -> None:
+    assert is_interface(type_) is expected
 
 
 @pytest.mark.parametrize(
-    ("typ", "expected"),
+    ("type_", "expected"),
     [(Union[str, int], True), (str | int, True), (int, False), (dict[str, str], False)],
 )
-def test_is_union(typ: type, expected: bool) -> None:
-    assert is_union(typ) is expected
+def test_is_union(type_: type, expected: bool) -> None:
+    assert is_union(type_) is expected
 
 
 @pytest.mark.parametrize(
-    ("typ", "expected"),
+    ("type_", "expected"),
     [(Optional[str], True), (dict[str, int] | None, True), (None | str, True), (int, False)],
 )
-def test_is_optional(typ: type, expected: bool) -> None:
-    assert is_optional(typ) is expected
+def test_is_optional(type_: type, expected: bool) -> None:
+    assert is_optional(type_) is expected
 
 
 @pytest.mark.parametrize(
-    ("typ", "expected"),
+    ("type_", "expected"),
     [(Optional[str], False), (Annotated[int | str, "metadata"], True), (str, False)],
 )
-def test_is_annotated(typ: type, expected: bool) -> None:
-    assert is_annotated(typ) is expected
+def test_is_annotated(type_: type, expected: bool) -> None:
+    assert is_annotated(type_) is expected
 
 
 @pytest.mark.parametrize(
-    ("typ", "expected"),
+    ("type_", "expected"),
     [(Any, True), (dict[str, int] | None, True), (None | str, True), (Parameter.empty, False)],
 )
-def test_has_parameter_type(typ: type, expected: bool) -> None:
-    assert has_parameter_type(typ) is expected
+def test_has_parameter_type(type_: type, expected: bool) -> None:
+    assert has_parameter_type(type_) is expected
 
 
 @pytest.mark.parametrize(
-    ("typ", "expected"),
+    ("type_", "expected"),
     [
         (int, [int]),
         (
@@ -88,17 +88,17 @@ def test_has_parameter_type(typ: type, expected: bool) -> None:
         (ConcreteService, [ConcreteService, ABCService]),
     ],
 )
-def test_filter_mro(typ: type, expected: list[type]) -> None:
-    assert filter_mro(typ) == expected
+def test_filter_mro(type_: type, expected: list[type]) -> None:
+    assert filter_mro(type_) == expected
 
 
 @pytest.mark.parametrize(
-    ("typ", "expected"),
+    ("type_", "expected"),
     [
         (int, (int, None)),
         (dict[str, int], (dict[str, int], None)),
         (Annotated[ConcreteService, qualifier("test")], (ConcreteService, Qualifier("test"))),
     ],
 )
-def test_extract_type_info(typ: type, expected: tuple[type, Qualifier | None]) -> None:
-    assert extract_type_info(typ) == expected
+def test_extract_type_info(type_: type, expected: tuple[type, Qualifier | None]) -> None:
+    assert extract_type_info(type_) == expected

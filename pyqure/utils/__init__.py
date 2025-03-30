@@ -1,1 +1,1 @@
-"""Utilty package of pyqure."""
+"""Utility package of pyqure."""

@@ -184,11 +184,11 @@ def configuration(
     Inside the function, it's possible to register injectables.
     It can be useful to centralize `Constant` injectables at one place.
 
-    Another functionnality is to discover from a package, to auto-load the injectables.
+    Another functionality is to discover from a package, to auto-load the injectables.
 
     Args:
         autoload: whether to discover injectables or not.
-        packages_to_load: from where perfom the discovering.
+        packages_to_load: from where perform the discovering.
         container: the container where registering the service.
         config: configuration function.
 
@@ -304,14 +304,14 @@ def _create_new_service_call(
         # else we search to inject the dependencies
         submitted_args = parameters.partial_bind(args, kwargs)
         all_args = (
-            _resolve_arguments_injectable(parameters.missings(kwargs=submitted_args), container)
+            _resolve_arguments_injectable(parameters.missing(kwargs=submitted_args), container)
             | submitted_args
         )
 
-        missings = set(parameters.mandatory) - set(all_args)
+        missing = set(parameters.mandatory) - set(all_args)
 
-        if missings:
-            raise MissingDependencies(service, missings)
+        if missing:
+            raise MissingDependencies(service, missing)
 
         return service(**all_args)
 

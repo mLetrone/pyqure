@@ -70,10 +70,10 @@ class DependencyContainer:
     def __getitem__(self, key: Key[T]) -> T:
         """Retrieve injectable by its Key.
 
-        The injectable look up order :
-            * Check if has been overrided
+        The injectable look up order:
+            * Check if has been overridden
             * Check if the key exists inside dependencies
-            * Check if a injectable has been set as primary for this type
+            * Check if an injectable has been set as primary for this type
             * Raise error
         """
         clss, qualifier = key
