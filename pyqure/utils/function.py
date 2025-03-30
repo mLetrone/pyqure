@@ -54,10 +54,10 @@ class Parameters:
     def partial_bind(
         self, positionals: Sequence[Any], kwargs: dict[str, Any]
     ) -> dict[ParamName, Param]:
-        """Gather the parameters partial passed to get teh submitted."""
+        """Gather the parameters partial passed to get the submitted."""
         return {self.at_position(pos).name: value for pos, value in enumerate(positionals)} | kwargs
 
-    def missings(
+    def missing(
         self, positionals: Sequence[Any] = (), kwargs: dict[ParamName, Any] | None = None
     ) -> dict[ParamName, Param]:
         """Returns missing parameters between the function signature and the provided."""

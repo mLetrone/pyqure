@@ -80,14 +80,14 @@ class TestParameters:
 
         assert params.at_position(2).name == "c"
 
-    def test_missings(self) -> None:
+    def test_missing(self) -> None:
         def foo(a, b, c, d="bar"): ...  # type: ignore[no-untyped-def]
 
         params = Parameters(foo)
 
-        missings = params.missings([0], {"c": False})
+        missing = params.missing([0], {"c": False})
 
-        assert missings == {
+        assert missing == {
             "b": Param(AnyType, False, "b", NoDefault, None),
             "d": Param(AnyType, False, "d", "bar", None),
         }
