@@ -54,6 +54,25 @@ lint = [
     "pre-commit>=4.0.1",
 ]
 
+[tool.pytest.ini_options]
+minversion = "8.0"
+required_plugins = [
+    "pytest-cov",
+    "pytest-html",
+]
+testpaths = [
+    "power_events",
+    "tests"
+]
+addopts = [
+    "--cov=pyqure",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+    "--cov-report=html",
+    "--html=tests-reports/index.html",
+    "--self-contained-html",
+]
+
 [tool.coverage.run]
 source = ["pyqure"]
 branch = true
