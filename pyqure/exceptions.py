@@ -1,0 +1,37 @@
+from typing import Any, Callable, Iterable
+
+from pyqure.utils.types import unpack_types
+
+
+class PyqureError(Exception):
+    """Pyqure general error."""
+
+
+class DependencyError(PyqureError):
+    """Dependency error."""
+
+
+class InvalidRegisteredType(DependencyError):
+    """Exception raised when invalid type used to register an injectable."""
+
+    def __init__(self, typ: type[Any]) -> None:
+        super().__init__(
+            f"Union types cannot be used for registered injectables:"
+            f" you provide {typ}, try registering separately one of {unpack_types(typ)}."
+        )
+
+
+class InjectionError(PyqureError):
+    """Injection error."""
+
+
+class MissingDependencies(InjectionError):
+    """Missing dependency for service injection call."""
+
+    def __init__(self, component: Callable[..., Any], missings: Iterable[str]) -> None:
+        super().__init__(
+            f"Cannot instantiate component {component}."
+            f" Missed binding for the following parameters: {', '.join(missings)}."
+        )
+        self.component = component
+        self.missings = missings
