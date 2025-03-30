@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: crate-ci/typos@master
+      - uses: crate-ci/typos@v1.31.0
 
   lint:
     name: "Lint"
@@ -44,7 +44,7 @@ jobs:
         run: uvx ruff check .
 
       - name: "Python type check"
-        run: uvx mypy
+        run: uv run mypy
 
   tests:
     name: "Testing with Python ${{ matrix.python-version }}"
