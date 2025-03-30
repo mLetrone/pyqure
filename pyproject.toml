@@ -53,6 +53,8 @@ lint = [
     "mypy[faster-cache]>=1.15.0",
     "ruff>=0.11.2",
     "pre-commit>=4.0.1",
+    # mypy should have all dependencies to run
+    { include-group = "dev" },
 ]
 
 [tool.pytest.ini_options]
