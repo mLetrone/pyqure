@@ -33,14 +33,14 @@ repos:
 
       - id: mypy
         name: mypy
-        entry: mypy
+        entry: uvx mypy
         language: python
         types_or: [ python, pyi ]
         stages: [pre-push]
 
       - id: tests
         name: tests
-        entry: pytest
+        entry: uvx pytest
         language: python
         types_or: [ python, pyi ]
         stages: [pre-push]
