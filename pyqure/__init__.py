@@ -1,6 +1,6 @@
-"""Top level Pyqure package.
+"""Pyqure is a dependency injector.
 
-Pyqure is a dependency injector, inspired by the simplicity and magic of spring annotation.
+It's inspired by the simplicity and magic of spring annotation, to bring it to the python world.
 """
 
 from importlib.metadata import PackageNotFoundError, version
