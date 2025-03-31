@@ -51,11 +51,11 @@ def create_injectable(
 
 
 @overload
-def component(service: Callable[P, T], /) -> Callable[P, T]: ...
+def component(service: type[T], /) -> type[T]: ...
 
 
 @overload
-def component(service: type[T], /) -> type[T]: ...
+def component(service: Callable[P, T], /) -> Callable[P, T]: ...
 
 
 @overload
@@ -105,11 +105,11 @@ def component(
 
 
 @overload
-def factory(service: Callable[..., T], /) -> Callable[..., T]: ...
+def factory(service: type[T], /) -> type[T]: ...
 
 
 @overload
-def factory(service: type[T], /) -> type[T]: ...
+def factory(service: Callable[..., T], /) -> Callable[..., T]: ...
 
 
 @overload
