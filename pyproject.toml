@@ -49,6 +49,13 @@ dev = [
     "pytest-html>=4.1.1",
     "pytest-sugar>=1.0.0",
 ]
+docs = [
+    "mike>=2.1.3",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.10",
+    "mkdocstrings[python]>=0.29.0",
+    "termynal>=0.13.0",
+]
 lint = [
     "mypy[faster-cache]>=1.15.0",
     "ruff>=0.11.2",
