@@ -20,6 +20,7 @@ authors = [
 ]
 description = "Dependency injector."
 readme = "README.md"
+license = { file = "LICENSE" }
 
 classifiers = [
     "License :: OSI Approved :: MIT License",
