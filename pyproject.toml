@@ -18,7 +18,7 @@ dynamic = ["version"]
 authors = [
     { name = "mathieu LETRONE", email = "mathieu.letrone@gmail.com" },
 ]
-description = "Dependency injector."
+description = "Unlock seamless dependency injection with the effortless charm of Spring annotations"
 readme = "README.md"
 license = { file = "LICENSE" }
 
