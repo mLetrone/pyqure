@@ -1,8 +1,8 @@
 import pytest
 
+from pyqure import factory
 from pyqure.container import Alias, Class, DependencyContainer, Key
 from pyqure.exceptions import DependencyError, InjectionError
-from pyqure.injection import factory
 from tests.fixtures.abstracts import ABCService, HasA
 
 

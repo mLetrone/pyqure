@@ -24,7 +24,7 @@ def qualifier(alias: str) -> Qualifier:
 
 
 class Injectable(Protocol[T]):
-    """Injectable object contrat."""
+    """Injectable object contract."""
 
     def supply(self) -> T:
         """Supply the injectable component/value."""

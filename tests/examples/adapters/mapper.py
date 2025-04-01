@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pyqure.injection import component
+from pyqure import component
 from tests.examples.adapters.items import VaccineItem
 from tests.examples.domain.models.patient import Vaccine
 

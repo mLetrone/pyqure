@@ -10,7 +10,6 @@ from typing import (
 )
 
 from pyqure.container import Alias, DependencyContainer, Key, dc
-from pyqure.discover import _get_package_caller, discover
 from pyqure.exceptions import InjectionError, MissingDependencies
 from pyqure.injectables import (
     Factory,
@@ -18,6 +17,7 @@ from pyqure.injectables import (
     Qualifier,
     Singleton,
 )
+from pyqure.utils.discover import _get_package_caller, discover
 from pyqure.utils.function import NoDefault, Param, Parameters, ParamName
 from pyqure.utils.types import is_interface, unpack_types
 

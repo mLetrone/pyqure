@@ -1,8 +1,8 @@
 import pytest
 
+from pyqure import configuration
 from pyqure.container import Alias, DependencyContainer, Key
 from pyqure.injectables import Constant
-from pyqure.injection import configuration
 
 
 class TestConfiguration:

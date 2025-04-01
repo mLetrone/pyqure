@@ -141,7 +141,7 @@ select = [
     "RUF", # Ruff
 ]
 ignore = [
-    "A003", "D100", "D107", "PLC0105", "D105", "TRY003",
+    "A003", "D100", "D104", "D107", "PLC0105", "D105", "TRY003",
     #  Formatter compatibility (https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules)
     "E501", "E111", "E114", "E117", "D206", "D300", "Q000", "Q001", "Q002", "Q003",
 ]

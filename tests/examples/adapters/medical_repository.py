@@ -1,4 +1,4 @@
-from pyqure.injection import component
+from pyqure import component
 from tests.examples.adapters.items import VaccineItem
 from tests.examples.adapters.mapper import VaccineMapper
 from tests.examples.domain.exceptions import MedicalException

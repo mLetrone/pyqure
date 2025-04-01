@@ -2,7 +2,7 @@ import importlib
 import inspect
 import pkgutil
 
-from pyqure.container import logger
+from pyqure.logger import logger
 
 
 def discover(package_name: str | None = None) -> None:

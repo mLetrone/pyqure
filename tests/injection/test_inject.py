@@ -4,10 +4,10 @@ from typing import Annotated
 
 import pytest
 
+from pyqure import component, configuration, inject
 from pyqure.container import Class, DependencyContainer, Key
 from pyqure.exceptions import MissingDependencies
 from pyqure.injectables import Constant, qualifier
-from pyqure.injection import component, configuration, inject
 
 
 class TestInject:

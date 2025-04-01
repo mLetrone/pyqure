@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pyqure.injection import inject
+from pyqure import inject
 from tests.examples.domain.models.patient import Patient
 from tests.examples.domain.port.medical_repository import MedicalRepository
 

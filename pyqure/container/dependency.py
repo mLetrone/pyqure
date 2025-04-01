@@ -1,36 +1,12 @@
 from contextlib import contextmanager
-from logging import Logger
-from pathlib import Path
-from typing import Any, Generic, Iterator, NamedTuple, TypeVar
+from typing import Any, Iterator, Self, TypeVar
 
-from typing_extensions import Self
-
+from pyqure.container.key import Key
 from pyqure.exceptions import DependencyError, InvalidRegisteredType
 from pyqure.injectables import Injectable
 from pyqure.utils.types import filter_mro, is_union
 
-logger = Logger("pyqure")
-
 T = TypeVar("T")
-
-DEFAULT_DEPENDENCIES_STATE_FILE = Path(".dependencies.pyq")
-
-
-class Key(NamedTuple, Generic[T]):
-    """Injectable key object."""
-
-    clazz: type[T] | None
-    qualifier: str | None
-
-
-def Class(clz: type[T]) -> Key[T]:
-    """Create a key with no qualifier."""
-    return Key(clz, None)
-
-
-def Alias(qualifier: str) -> Key[T]:
-    """Create a key with no type."""
-    return Key(None, qualifier)
 
 
 class DependencyContainer:
@@ -48,6 +24,7 @@ class DependencyContainer:
 
         Notes:
             Can add some options to the injectable registering impossible with __setitem__
+
                 * primary : specify that to use the injectable for a class over others.
 
         Examples:
