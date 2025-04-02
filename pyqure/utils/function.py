@@ -1,7 +1,7 @@
 import sys
 from dataclasses import dataclass
 from inspect import Parameter, Signature, signature
-from typing import Annotated, Any, Callable, ForwardRef, Sequence
+from typing import Annotated, Any, Callable, ForwardRef, Iterable, Mapping, Sequence
 
 from pyqure.injectables import Qualifier
 from pyqure.utils.types import extract_type_info, has_parameter_type
@@ -28,8 +28,8 @@ class Param:
     qualifier: Qualifier | None
 
 
-class Parameters:
-    """Utily class to parse and manupilate function signature."""
+class Function:
+    """Utility class to parse and manipulate function signature."""
 
     def __init__(self, func: Callable[..., Any]) -> None:
         self.signature = signature(func)
@@ -47,9 +47,26 @@ class Parameters:
         """Mandatory parameters, the parameters that do not have default value."""
         return {key: value for key, value in self.value.items() if value.default is NoDefault}
 
-    def at_position(self, index: int) -> Param:
-        """Get the parameter at position."""
-        return self.value[self._positional_names[index]]
+    def get_missing_from(
+        self, positionals: Sequence[Any] = (), kwargs: dict[ParamName, Any] | None = None
+    ) -> dict[ParamName, Param]:
+        """Returns missing parameters between the function signature and the provided."""
+        submitting_parameters = self.partial_bind(positionals, kwargs or {})
+
+        return {key: value for key, value in self.value.items() if key not in submitting_parameters}
+
+    def is_callable_with(self, args: Iterable[Any], kwargs: Mapping[str, Any]) -> bool:
+        """Check whether the function is callable with this arguments mapping.
+
+        Returns:
+             True if that's the case, otherwise False.
+        """
+        try:
+            self.signature.bind(*args, **kwargs)
+        except TypeError:
+            return False
+        else:
+            return True
 
     def partial_bind(
         self, positionals: Sequence[Any], kwargs: dict[str, Any]
@@ -57,13 +74,9 @@ class Parameters:
         """Gather the parameters partial passed to get the submitted."""
         return {self.at_position(pos).name: value for pos, value in enumerate(positionals)} | kwargs
 
-    def missing(
-        self, positionals: Sequence[Any] = (), kwargs: dict[ParamName, Any] | None = None
-    ) -> dict[ParamName, Param]:
-        """Returns missing parameters between the function signature and the provided."""
-        submitting_parameters = self.partial_bind(positionals, kwargs or {})
-
-        return {key: value for key, value in self.value.items() if key not in submitting_parameters}
+    def at_position(self, index: int) -> Param:
+        """Get the parameter at position."""
+        return self.value[self._positional_names[index]]
 
     def _get_parameters(self, sig: Signature, func_module: str | None) -> dict[ParamName, Param]:
         """Extract parameters of the signature."""

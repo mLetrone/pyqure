@@ -18,7 +18,7 @@ from pyqure.injectables import (
     Singleton,
 )
 from pyqure.utils.discover import _get_package_caller, discover
-from pyqure.utils.function import NoDefault, Param, Parameters, ParamName
+from pyqure.utils.function import Function, NoDefault, Param, ParamName
 from pyqure.utils.types import is_interface, unpack_types
 
 T = TypeVar("T")
@@ -293,22 +293,24 @@ def _create_new_service_call(
             f"The service {service} provided is invalid:"
             f" it's impossible to instantiate abstract or protocol classes."
         )
-    parameters = Parameters(service)
+    function = Function(service)
 
     @wraps(service)
     def decorator(*args: Any, **kwargs: Any) -> T:
         # If it can be called normally
-        if _is_callable_with_binding(service, *args, **kwargs):
+        if function.is_callable_with(args, kwargs):
             return service(*args, **kwargs)
 
         # else we search to inject the dependencies
-        submitted_args = parameters.partial_bind(args, kwargs)
+        submitted_args = function.partial_bind(args, kwargs)
         all_args = (
-            _resolve_arguments_injectable(parameters.missing(kwargs=submitted_args), container)
+            _resolve_arguments_injectable(
+                function.get_missing_from(kwargs=submitted_args), container
+            )
             | submitted_args
         )
 
-        missing = set(parameters.mandatory) - set(all_args)
+        missing = set(function.mandatory) - set(all_args)
 
         if missing:
             raise MissingDependencies(service, missing)
@@ -345,17 +347,3 @@ def _resolve_arguments_injectable(
             resolved[name] = arg.default
 
     return resolved
-
-
-def _is_callable_with_binding(f: Callable[..., Any], *args: Any, **kwargs: Any) -> bool:
-    """Check whether the function is callable with this arguments mapping.
-
-    Returns:
-         True if that's the case, otherwise False.
-    """
-    try:
-        signature(f).bind(*args, **kwargs)
-    except TypeError:
-        return False
-    else:
-        return True
