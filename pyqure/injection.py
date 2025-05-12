@@ -83,7 +83,7 @@ def component(
         service: function or class to register
         container: the container where registering the service
         qualifier: can be passed to specify an alias to the component,
-         and identify it for injection over other components of same type.
+             and identify it for injection over other components of same type.
         primary: allow to prioritize component over others of same type if no qualifier set for injection.
 
     Examples:
@@ -137,8 +137,8 @@ def factory(
         service: function or class to register
         container: the container where registering the service
         qualifier: can be passed to specify an alias to the component,
-         and identify it for injection over other components of same type.
-         For function, qualifier default value is the function name.
+            and identify it for injection over other components of same type.
+            For function, qualifier default value is the function name.
         primary: allow to prioritize component over others of same type if no qualifier set for injection.
     """
 
