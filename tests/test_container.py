@@ -17,44 +17,31 @@ class TestContainer:
     def test_register(self) -> None:
         self.container.register(Key(int, "test"), Constant(42))
 
-        assert self.container._overrides == {}
-        assert self.container._primary == {}
-        assert self.container._injectables == {(int, "test"): Constant(42)}
+        assert self.container[Key(int, "test")] == 42
 
     def test_register_with_only_alias(self) -> None:
         self.container.register(Alias("test"), Constant(42))
 
-        assert self.container._overrides == {}
-        assert self.container._primary == {}
-        assert self.container._injectables == {(None, "test"): Constant(42)}
+        assert self.container[Alias("test")] == 42
 
     def test_register_with_only_type(self) -> None:
         self.container.register(Class(int), Constant(42))
 
-        assert self.container._overrides == {}
-        assert self.container._primary == {}
-        assert self.container._injectables == {(int, None): Constant(42)}
+        assert self.container[Class(int)] == 42
 
     def test_register_should_register_all_super_classes_of_type(self) -> None:
-        constant = Constant(ConcreteService())
-        self.container.register(Key(ConcreteService, "test"), constant)
+        service = ConcreteService()
 
-        assert self.container._overrides == {}
-        assert self.container._primary == {}
-        assert self.container._injectables == {
-            (ConcreteService, "test"): constant,
-            (ABCService, "test"): constant,
-        }
+        self.container.register(Key(ConcreteService, "test"), Constant(service))
+
+        assert self.container[Key(ConcreteService, "test")] == service
+        assert self.container[Key(ABCService, "test")] == service
 
     def test_register_with_generics_types(self) -> None:
         self.container.register(Key(dict[str, int], "test"), Constant({"count": 0}))
 
-        assert self.container._overrides == {}
-        assert self.container._primary == {}
-        assert self.container._injectables == {
-            (dict[str, int], "test"): Constant({"count": 0}),
-            (dict, "test"): Constant({"count": 0}),
-        }
+        assert self.container[Key(dict[str, int], "test")] == {"count": 0}
+        assert self.container[Key(dict, "test")] == {"count": 0}
 
     @pytest.mark.parametrize("union", [Union[str | int], Optional[dict[str, int]], str | Path])
     def test_register_raises_when_using_union_types(self, union: type[Any]) -> None:
@@ -64,9 +51,8 @@ class TestContainer:
     def test_register_with_primary(self) -> None:
         self.container.register(Key(int, "test"), Constant(42), primary=True)
 
-        assert len(self.container._overrides) == 0
-        assert self.container._primary == {int: (int, "test")}
-        assert self.container._injectables == {(int, "test"): Constant(42)}
+        assert self.container[Class(int)] == 42
+        assert self.container[Key(int, "test")] == 42
 
     def test_get_no_result_should_raise_error(self) -> None:
         with pytest.raises(DependencyError):
@@ -96,5 +82,4 @@ class TestContainer:
         with self.container.override(Key(int, "test"), Constant(0)):
             assert self.container[Key(int, "test")] == 0
 
-        assert self.container._overrides == {}
         assert self.container[Key(int, "test")] == 42
