@@ -239,9 +239,9 @@ def inject(
     Or passing only some, or even zero, and inject the missing ones with the registered injectables.
 
     For each parameter the corresponding injectable is searched this way:
-        * does a service is registered by this alias key
-        * does a service is registered by this type and parameter name key
-        * does the parameter is annotated with a qualifier ex: param: Annotated[Service, qualifier("alias")], so look up for a service with Key(Service, "alias")
+        1. does a service is registered by this alias key
+        2. does a service is registered by this type and parameter name key
+        3. does the parameter is annotated with a qualifier ex: param: Annotated[Service, qualifier("alias")], so look up for a service with Key(Service, "alias")
     """
 
     def decorator(service_: Callable[P, T]) -> Callable[..., T]:

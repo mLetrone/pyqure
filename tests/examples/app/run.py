@@ -12,8 +12,8 @@ def is_up_to_date(repository: MedicalRepository, patient: Patient) -> bool:
     return all(vaccine.recall_date < datetime.now() for vaccine in vaccines)
 
 
+@inject
 class Handler:
-    @inject
     def __init__(self, repository: MedicalRepository) -> None:
         self.repository = repository
 
