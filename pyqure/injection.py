@@ -10,7 +10,7 @@ from typing import (
 )
 
 from pyqure.container import Alias, DependencyContainer, Key, dc
-from pyqure.exceptions import InjectionError, MissingDependencies
+from pyqure.exceptions import InjectionError, MissingDependenciesError
 from pyqure.injectables import (
     Factory,
     Injectable,
@@ -313,7 +313,7 @@ def _create_new_service_call(
         missing = set(function.mandatory) - set(all_args)
 
         if missing:
-            raise MissingDependencies(service, missing)
+            raise MissingDependenciesError(service, missing)
 
         return service(**all_args)
 

@@ -9,4 +9,4 @@ def test_is_up_to_date() -> None:
 
 def test_handler() -> None:
     patient_a = Patient("Bob", "Smith", SocialId("0976543215"))
-    assert Handler().handle(patient_a)
+    assert Handler().handle(patient_a)  # type: ignore[call-arg]

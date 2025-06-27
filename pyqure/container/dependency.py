@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from typing import Any, Iterator, Self, TypeVar
 
 from pyqure.container.key import Key
-from pyqure.exceptions import DependencyError, InvalidRegisteredType
+from pyqure.exceptions import DependencyError, InvalidRegisteredTypeError, NoUniqueInjectableError
 from pyqure.injectables import Injectable
 from pyqure.utils.types import filter_mro, is_union
 
@@ -85,14 +85,30 @@ class DependencyContainer:
 
         if clzz:
             if is_union(clzz):
-                raise InvalidRegisteredType(clzz)
+                raise InvalidRegisteredTypeError(clzz)
 
             for cls in filter_mro(clzz):
+                self.__check_collisions(Key(cls, qualifier), primary)
                 self._injectables[Key(cls, qualifier)] = component
                 if primary:
                     self._primary[cls] = key
         else:
+            self.__check_collisions(key, primary)
             self._injectables[key] = component
+
+    def __check_collisions(self, key: Key[T], primary: bool) -> None:
+        clazz, qualifier = key
+        collision_error = NoUniqueInjectableError(clazz, qualifier)
+
+        if key in self._injectables:
+            if clazz is None:
+                raise collision_error
+
+            if clazz in self._primary and primary:
+                raise collision_error
+
+            if clazz not in self._primary and not primary:
+                raise collision_error
 
 
 dc: DependencyContainer = DependencyContainer()

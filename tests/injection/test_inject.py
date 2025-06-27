@@ -6,7 +6,7 @@ import pytest
 
 from pyqure import component, configuration, inject
 from pyqure.container import Class, DependencyContainer, Key
-from pyqure.exceptions import MissingDependencies
+from pyqure.exceptions import MissingDependenciesError
 from pyqure.injectables import Constant, qualifier
 
 
@@ -21,7 +21,7 @@ class TestInject:
             pass
 
         with pytest.raises(
-            MissingDependencies, match="Missed binding for the following parameters: data."
+            MissingDependenciesError, match="Missed binding for the following parameters: data."
         ):
             run()
 

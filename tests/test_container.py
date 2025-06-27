@@ -1,10 +1,12 @@
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Optional, Union
 
 import pytest
 
+from pyqure import component, factory
 from pyqure.container import Alias, Class, DependencyContainer, Key
-from pyqure.exceptions import DependencyError, InvalidRegisteredType
+from pyqure.exceptions import DependencyError, InvalidRegisteredTypeError, NoUniqueInjectableError
 from pyqure.injectables import Constant
 from tests.fixtures.abstracts import ABCService, ConcreteService
 
@@ -45,7 +47,7 @@ class TestContainer:
 
     @pytest.mark.parametrize("union", [Union[str | int], Optional[dict[str, int]], str | Path])
     def test_register_raises_when_using_union_types(self, union: type[Any]) -> None:
-        with pytest.raises(InvalidRegisteredType):
+        with pytest.raises(InvalidRegisteredTypeError):
             self.container[Class(union)] = Constant("error")
 
     def test_register_with_primary(self) -> None:
@@ -68,6 +70,25 @@ class TestContainer:
 
         with pytest.raises(DependencyError):
             _a = self.container[Class(int)]
+
+    def test_collision(self) -> None:
+        with pytest.raises(NoUniqueInjectableError):
+
+            class Service(ABC):
+                @abstractmethod
+                def execute(self) -> str: ...
+
+            @component(container=self.container)
+            class PostgresService(Service):
+                def execute(self) -> str:
+                    return "PostgresService"
+
+            @factory(container=self.container)
+            class InMemoryService(Service):
+                def execute(self) -> str:
+                    return "InMemoryService"
+
+            self.container[Class(Service)]  # type: ignore[type-abstract]
 
     def test_get_when_primary(self) -> None:
         self.container.register(Key(int, "42"), Constant(42)).register(
